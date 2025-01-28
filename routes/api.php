@@ -13,9 +13,14 @@ Route::post('register', [UserController::class, 'register']); //Resgitro usuario
 Route::post('login', [UserController::class, 'login']); //Inicia sesion usuarios "user" y "admin"
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('perfil', [UserController::class, 'index']); //Muestra los datos de usuario que ha iniciado sesión
+    Route::get('users', [UserController::class, 'index']); //Muestra todos los usuarios
+    Route::get('profile', [UserController::class, 'profile']); //Muestra los datos de usuario que ha iniciado sesión
+    Route::get('users/user', [UserController::class, 'allNormalUsers']); //Muestra todos los usuarios con rol "user"
     Route::get('logout', [UserController::class, 'logout']);//Cierra sesión
     Route::put('update/{id}', [UserController::class, 'update']);//Actualiza información del usuario
+    Route::delete('delete/{id}', [UserController::class, 'destroy']);//Elimina un usuario
+    Route::get('users/by-date', [UserController::class, 'usersByDate']);//Muestra los usuarios registrados en una fecha específica
+    Route::get('users/by-dates', [UserController::class, 'usersByDates']);//Muestra los usuarios registrados en un rango de fechas
 
     Route::post('refresh-token', function (Request $request) { //Genera y retorna un token actualizado
         $user = $request->user();
