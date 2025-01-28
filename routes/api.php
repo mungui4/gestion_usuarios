@@ -14,7 +14,7 @@ Route::post('login', [UserController::class, 'login']); //Inicia sesion usuarios
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('users', [UserController::class, 'index']); //Muestra todos los usuarios
-    Route::get('perfil', [UserController::class, 'perfil']); //Muestra los datos de usuario que ha iniciado sesión
+    Route::get('profile', [UserController::class, 'profile']); //Muestra los datos de usuario que ha iniciado sesión
     Route::get('users/user', [UserController::class, 'allNormalUsers']); //Muestra todos los usuarios con rol "user"
     Route::get('logout', [UserController::class, 'logout']);//Cierra sesión
     Route::put('update/{id}', [UserController::class, 'update']);//Actualiza información del usuario

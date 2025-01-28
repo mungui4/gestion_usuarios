@@ -21,7 +21,8 @@ class UserController extends Controller
                 'last_name' => 'required|string|max:255',
                 'address' => 'required|string|max:255',
                 'email' => 'required|string|max:255',
-                'phone' => 'required|string|max:15'
+                'phone' => 'required|string|max:15',
+                'password' => 'required|min:8'
             ]);
 
             $user = User::create([ //Guarda los datos en la db
@@ -117,7 +118,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function perfil() //Muestra la información del usuario
+    public function profile() //Muestra la información del usuario
     {
         //
         $usuario = Auth::user();
@@ -136,13 +137,14 @@ class UserController extends Controller
     {
 
         $perfil = User::findOrfail($id);
-        $request->validate([
-            'name' => 'required|string',
-            'last_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
-            'phone' => 'required|string|max:15'
-        ]);
+            $request->validate([ //Valida los campos recibidos
+                'name' => 'required|string',
+                'last_name' => 'required|string|max:255',
+                'address' => 'required|string|max:255',
+                'email' => 'required|string|max:255',
+                'phone' => 'required|string|max:15',
+                'password' => 'required|min:8'
+            ]);
 
         if ($request->user()->id === $perfil->id) {
             $perfil->update($request->all());
