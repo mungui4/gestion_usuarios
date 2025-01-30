@@ -1,66 +1,155 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+***API de Gestión de Usuarios***
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Autenticación**
 
-## About Laravel
+*Registro de Usuario*
+- URL: /api/register
+- Método: POST
+- Descripción: Registra un nuevo usuario con rol "user".
+- Cuerpo de la solicitud:
+  {
+    "name": "string",
+    "last_name": "string",
+    "address": "string",
+    "email": "string",
+    "phone": "string",
+    "password": "string"
+  }
+- Respuesta exitosa:
+  {
+    "message": "Usuario registrado con éxito",
+    "data": { ... }
+  }
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+*Inicio de Sesión*
+- URL: /api/login
+- Método: POST
+- Descripción: Inicia sesión para usuarios con rol "user" y "admin".
+- Cuerpo de la solicitud:
+  {
+    "email": "string",
+    "password": "string"
+  }
+- Respuesta exitosa:
+  {
+    "token": "string"
+  }
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Rutas Protegidas**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+*Obtener Perfil*
+- URL: /api/profile
+- Método: GET
+- Descripción: Muestra los datos del usuario que ha iniciado sesión.
+- Autenticación: Bearer Token
+- Respuesta exitosa:
+  {
+    "id": "integer",
+    "name": "string",
+    "last_name": "string",
+    "address": "string",
+    "email": "string",
+    "phone": "string",
+    "role": "string"
+  }
 
-## Learning Laravel
+*Actualizar Usuario*
+- URL: /api/update/{id}
+- Método: PUT
+- Descripción: Actualiza la información de un usuario.
+- Autenticación: Bearer Token
+- Cuerpo de la solicitud:
+  {
+    "name": "string",
+    "last_name": "string",
+    "address": "string",
+    "email": "string",
+    "phone": "string",
+    "password": "string"
+  }
+- Respuesta exitosa:
+  {
+    "message": "Actualizado con éxito",
+    "data": { ... }
+  }
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+*Eliminar Usuario*
+- URL: /api/delete/{id}
+- Método: DELETE
+- Descripción: Elimina un usuario. Solo los administradores pueden realizar esta acción y no pueden eliminar a otros administradores.
+- Autenticación: Bearer Token
+- Respuesta exitosa:
+  {
+    "message": "Usuario eliminado"
+  }
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+*Usuarios por Fecha*
+- URL: /api/users/by-date
+- Método: GET
+- Descripción: Muestra los usuarios registrados en una fecha específica.
+- Autenticación: Bearer Token
+- Parámetros de consulta:
+  - date: Fecha en formato YYYY-MM-DD
+- Respuesta exitosa:
+  {
+    "message": "Usuarios registrados en la fecha: YYYY-MM-DD",
+    "data": [ ... ]
+  }
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+*Usuarios por Rango de Fechas*
+- URL: /api/users/by-dates
+- Método: GET
+- Descripción: Muestra los usuarios registrados en un rango de fechas.
+- Autenticación: Bearer Token
+- Parámetros de consulta:
+  - date1: Fecha de inicio en formato YYYY-MM-DD
+  - date2: Fecha de fin en formato YYYY-MM-DD
+- Respuesta exitosa:
+  {
+    "message": "Usuarios registrados entre las fechas: YYYY-MM-DD y YYYY-MM-DD",
+    "data": [ ... ]
+  }
 
-## Laravel Sponsors
+*Refrescar Token*
+- URL: /api/refresh-token
+- Método: POST
+- Descripción: Genera y retorna un token actualizado.
+- Autenticación: Bearer Token
+- Respuesta exitosa:
+  {
+    "token": "string"
+  }
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Errores**
 
-### Premium Partners
+*Formato de Fecha Incorrecto*
+- Código de estado: 400
+- Respuesta:
+  {
+    "message": "Formato de fecha incorrecto"
+  }
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+*No Autorizado*
+- Código de estado: 401
+- Respuesta:
+  {
+    "message": "No tienes permisos para realizar esta acción"
+  }
 
-## Contributing
+*No Encontrado*
+- Código de estado: 404
+- Respuesta:
+  {
+    "message": "No encontrado"
+  }
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+*Prohibido*
+- Código de estado: 403
+- Respuesta:
+  {
+    "message": "No puedes eliminar a otro administrador"
+  }
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Notas**
+- *Todas las rutas protegidas requieren autenticación mediante un token Bearer.*
+- *Asegúrate de enviar las fechas en el formato YYYY-MM-DD para las rutas que lo requieran.*
