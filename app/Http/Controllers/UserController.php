@@ -143,7 +143,6 @@ class UserController extends Controller
                 'address' => 'required|string|max:255',
                 'email' => 'required|string|max:255',
                 'phone' => 'required|string|max:15',
-                'password' => 'required|min:8'
             ]);
 
         if ($request->user()->id === $perfil->id) {
